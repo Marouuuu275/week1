@@ -1,5 +1,4 @@
 <?php
-// Do not put any HTML above this line
 session_start();
 require_once "pdo.php";
 
@@ -8,7 +7,6 @@ $stmt = $pdo->query("SELECT profile_id, first_name, last_name, headline
                      FROM users JOIN Profile ON users.user_id = Profile.user_id");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,23 +17,20 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container">
     <h2>Chuck Severance's Resume Registry</h2>
 
-    <?php
-    // Lien Logout si connecté
-    if (isset($_SESSION['name'])) {
-        echo '<p><a href="logout.php">Logout</a></p>';
-    }
+    <?php if (isset($_SESSION['name'])): ?>
+        <p><a href="logout.php">Logout</a></p>
+    <?php endif; ?>
 
-    // Message de succès
+    <?php
     if (isset($_SESSION['success'])) {
         echo('<p style="color: green;">' . htmlentities($_SESSION['success']) . "</p>\n");
         unset($_SESSION['success']);
     }
-
-    // Si pas connecté → lien exact "Please log in"
-    if (!isset($_SESSION['name'])) {
-        echo "<p><a href='login.php'>Please log in</a></p>";
-    }
     ?>
+
+    <?php if (!isset($_SESSION['name'])): ?>
+        <p><a href="login.php">Please log in</a></p>
+    <?php endif; ?>
 
     <?php if (count($rows) > 0): ?>
         <table border="1">
